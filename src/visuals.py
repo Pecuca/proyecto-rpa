@@ -31,3 +31,24 @@ def grafico_segmento_clientes(df):
     plt.tight_layout()
     plt.savefig("output/segmento_clientes.png")
     plt.close()
+
+def dashboard_resumen(df):
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+
+    # Ventas por sede
+    df.groupby("sede")["precio_sin_igv"].sum().plot(kind="bar", ax=axs[0,0], title="Ventas por sede")
+
+    # Top modelos
+    df["modelo"].value_counts().head(5).plot(kind="barh", ax=axs[0,1], title="Top 5 modelos")
+
+    # Canales
+    df.groupby("canal")["precio_sin_igv"].sum().plot(kind="bar", ax=axs[1,0], title="Canales con más ventas")
+
+    # Segmento clientes
+    df.groupby("segmento")["precio_sin_igv"].sum().plot(kind="pie", autopct="%1.1f%%", ax=axs[1,1])
+    axs[1,1].set_ylabel("")
+    axs[1,1].set_title("Segmento clientes")
+
+    plt.tight_layout()
+    plt.savefig("output/dashboard.png")
+    plt.close()
