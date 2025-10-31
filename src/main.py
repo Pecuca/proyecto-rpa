@@ -11,18 +11,20 @@ from src.visuals import (
     grafico_ventas_por_sede,
     grafico_top_modelos,
     grafico_canales,
-    grafico_segmento_clientes
+    grafico_segmento_clientes,
+    dashboard_resumen
 )
 from src.report_sender import send_whatsapp_message
 
 # ⚠️ Configura tus credenciales de Twilio aquí
-ACCOUNT_SID = "TU_ACCOUNT_SID"
-AUTH_TOKEN = "TU_AUTH_TOKEN"
-TO_NUMBER = "whatsapp:+58XXXXXXXX"  # tu número de WhatsApp
+ACCOUNT_SID = "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+AUTH_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+TO_NUMBER = "whatsapp:+58XXXXXXXXXX"  # tu número personal registrado en el sandbox
 
 if __name__ == "__main__":
     # 1. Cargar datos
     df = load_data("data/Ventas Fundamentos.xlsx")
+    print("Datos cargados correctamente ✅")
 
     # 2. Análisis
     print("Ventas sin IGV por sede:\n", ventas_sin_igv_por_sede(df))
@@ -37,6 +39,7 @@ if __name__ == "__main__":
     grafico_top_modelos(df)
     grafico_canales(df)
     grafico_segmento_clientes(df)
+    dashboard_resumen(df)
     print("✅ Gráficos generados en 'output/'")
 
     # 4. Enviar reporte por WhatsApp
@@ -48,10 +51,14 @@ if __name__ == "__main__":
         f"- Total con IGV: {total_ventas(df)['con_igv']}\n"
     )
 
-    # Aquí deberías poner URLs públicas de los gráficos si quieres enviarlos
+    # ⚠️ IMPORTANTE: Twilio solo acepta imágenes desde URLs públicas
+    # Ejemplo con imágenes subidas a GitHub (reemplaza con tus enlaces reales)
     media_urls = [
-        # "https://mi-servidor.com/ventas_por_sede.png",
-        # "https://mi-servidor.com/top_modelos.png"
+        # "https://raw.githubusercontent.com/Pecuca/proyecto-rpa/main/output/ventas_por_sede.png",
+        # "https://raw.githubusercontent.com/Pecuca/proyecto-rpa/main/output/top_modelos.png",
+        # "https://raw.githubusercontent.com/Pecuca/proyecto-rpa/main/output/canales.png",
+        # "https://raw.githubusercontent.com/Pecuca/proyecto-rpa/main/output/segmento_clientes.png",
+        # "https://raw.githubusercontent.com/Pecuca/proyecto-rpa/main/output/dashboard.png"
     ]
 
     send_whatsapp_message(ACCOUNT_SID, AUTH_TOKEN, TO_NUMBER, body, media_urls)
